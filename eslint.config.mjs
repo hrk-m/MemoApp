@@ -1,20 +1,29 @@
-import pluginJs from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-
+import pluginJs from "@eslint/js"
+import pluginReactConfig from "eslint-plugin-react/configs/recommended.js"
+import globals from "globals"
+import tseslint from "typescript-eslint"
 
 export default [
-  {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {languageOptions: { globals: globals.node }},
+  {
+    languageOptions: {
+      globals: globals.node
+    }
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  pluginReactConfig,
+  {
+    rules: {
+      "react/react-in-jsx-scope": 0,
+      "semi": [2, "never"],
+      "comma-dangle": [2, "never"]
+    }
+  },
   {
     settings: {
       react: {
-        version: 'detect',
-      },
-    },
-  },
-];
+        version: 'detect'
+      }
+    }
+  }
+]
