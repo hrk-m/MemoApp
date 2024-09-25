@@ -1,6 +1,8 @@
 import { Link, router } from "expo-router"
+import { signInWithEmailAndPassword } from "firebase/auth"
 import { useState } from "react"
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -8,10 +10,18 @@ import {
   View
 } from "react-native"
 import Button from "../../components/Button"
+import { auth } from "../../config"
 
-const handlePress = (): void => {
+const handlePress = (email: string, password: string): void => {
   // ログイン
-  router.replace("/memo/list")
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      router.replace("/memo/list")
+    })
+    .catch((error) => {
+      console.log("error", error)
+      Alert.alert("EmailまたはPasswordが違います")
+    })
 }
 
 const LogIn = (): JSX.Element => {
@@ -40,10 +50,10 @@ const LogIn = (): JSX.Element => {
           placeholder="Password"
           textContentType="password" // keychain に情報を保存するため。また保管も
         />
-        <Button label="submit" onPress={handlePress} />
+        <Button label="submit" onPress={() => handlePress(email, password)} />
         <View style={styles.footer}>
           <Text style={styles.footerText}>Not registered?</Text>
-          <Link href="/auth/sign_up" asChild>
+          <Link href="/auth/sign_up" asChild replace>
             <TouchableOpacity>
               <Text style={styles.footerLink}>Sign up here!</Text>
             </TouchableOpacity>
