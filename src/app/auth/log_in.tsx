@@ -15,7 +15,7 @@ import { auth } from "../../config"
 const handlePress = (email: string, password: string): void => {
   // ログイン
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(() => {
       router.replace("/memo/list")
     })
     .catch((error) => {
