@@ -1,33 +1,56 @@
 import { router } from "expo-router"
-import React from "react"
+import { addDoc, collection, Timestamp } from "firebase/firestore"
+import { useState } from "react"
 import {
-  KeyboardAvoidingView,
+  Alert,
   StyleSheet,
   TextInput,
   View
 } from "react-native"
 import CircleButton from "../../components/CircleButton"
 import Icon from "../../components/Icon"
+import KeyboardSafeView from "../../components/KeyboardAvoidingView"
+import { auth, db } from "../../config"
 
-const handlePress = (): void => {
-  (router as { back: () => void }).back()
+const handlePress = (bodyText: string): void => {
+  if (auth.currentUser == null) { return }
+  const ref = collection(db, `users/${auth.currentUser?.uid}/memos`)
+
+  addDoc(ref, {
+    bodyText: bodyText,
+    updatedAt: Timestamp.fromDate(new Date())
+  })
+  .then((docRef) => {
+      console.log("docRef", docRef.id)
+    })
+    .catch((error) => {
+      console.log("error", error)
+      Alert.alert("EmailまたはPasswordが違います")
+    })
+
+  router.back()
 }
 
 const Create = (): JSX.Element => {
+  const [bodyText, setBodyText] = useState('')
+
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
+    <KeyboardSafeView style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Enter text here"
           multiline
           style={styles.input}
-          value=""
+          value={bodyText}
+          autoCapitalize="none"
+          autoFocus
+          onChangeText={(text) => setBodyText(text)}
         />
       </View>
-      <CircleButton onPress={handlePress}>
+      <CircleButton onPress={() => handlePress(bodyText)}>
         <Icon name="check" size={40} color="#ffffff" />
       </CircleButton>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   )
 }
 
