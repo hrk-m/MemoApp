@@ -1,34 +1,68 @@
-import { router } from "expo-router"
-import React from "react"
+import { router, useLocalSearchParams } from "expo-router"
+import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
+import { useEffect, useState } from "react"
 import {
-  KeyboardAvoidingView,
+  Alert,
   StyleSheet,
   TextInput,
   View
 } from "react-native"
 import CircleButton from "../../components/CircleButton"
 import Icon from "../../components/Icon"
+import KeyboardSafeView from "../../components/KeyboardAvoidingView"
+import { auth, db } from "../../config"
 
-const handlePress = (): void => {
-  router.back()
+const handlePress = (id: string, bodyText: string): void => {
+  if (auth.currentUser === null) { return }
+  const ref = doc(db, `users/${auth.currentUser.uid}/memos`, id)
+  setDoc(ref, {
+    bodyText,
+    updatedAt: Timestamp.fromDate(new Date())
+  })
+    .then(() => {
+      router.back()
+    })
+    .catch(() => {
+      Alert.alert('更新に失敗しました')
+    })
 }
 
 const Edit = (): JSX.Element => {
+  const id  = String(useLocalSearchParams().id)
+  const [bodyText, setBodyText] = useState("")
+  useEffect(() => {
+    if (auth.currentUser == null) { return }
+
+    const ref = doc(db, `users/${auth.currentUser?.uid}/memos/`, id)
+    getDoc(ref)
+      .then((docRef) => {
+        const RemoteBodyText = docRef?.data()?.bodyText
+        setBodyText(RemoteBodyText)
+      })
+      .catch(() => {
+        Alert.alert("メモデータの取得に失敗しました")
+      })
+
+  }, [])
+
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
+    <KeyboardSafeView style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Enter text here"
           multiline
+          autoFocus
+          autoCapitalize="none"
+          onChangeText={(bodyText) => setBodyText(bodyText)}
           style={styles.input}
-          value={"買い物\nメモ"}
+          value={bodyText}
         />
       </View>
 
-      <CircleButton onPress={handlePress}>
+      <CircleButton onPress={() => handlePress(id, bodyText)}>
         <Icon name="check" size={40} color="#ffffff" />
       </CircleButton>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   )
 }
 
