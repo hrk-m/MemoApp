@@ -16,3 +16,21 @@ React Native, Firebase, Expo を使ってメモアプリを開発
 ```
 npm run start
 ```
+
+
+# メモ
+
+## Permissions
+
+Cloud Firestore のルールに以下を設定
+```
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/memos/{memo} {
+      allow read, write: if request.auth.uid == userId;
+    }
+  }
+}
+```
