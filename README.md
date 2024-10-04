@@ -2,6 +2,14 @@
 
 React Native, Firebase, Expo を使ってメモアプリを開発
 
+
+# どういったもの動画
+
+- todo(memo) app
+
+![アプリデモ](docs/video1.mov)
+
+
 # モバイル設定
 
 - Android Studio
