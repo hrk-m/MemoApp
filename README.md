@@ -5,10 +5,11 @@ React Native, Firebase, Expo を使ってメモアプリを開発
 
 # どういったもの動画
 
-- todo(memo) app
-
 ![アプリデモ](docs/video1.mov)
 
+# figma
+
+https://www.figma.com/design/BEHXzYCGCzI8tahVwgA5AH/MemoApp?node-id=66-2&node-type=canvas&t=GzO27O6mv6wsdXqY-0
 
 # モバイル設定
 
