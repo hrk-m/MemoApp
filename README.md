@@ -6,10 +6,12 @@ React Native, Firebase, Expo を使ってメモアプリを開発
 # どういったもの動画
 
 <div>
-  <iframe src="_docs/video1.mov></iframe>
+  <iframe src="docs/video1.mov></iframe>
 </div>
 
-<video src="_docs/video1.mov" controls="true"></video>
+<video src="docs/video1.mov"></video>
+
+<video src="https://github.com/hrk-m/MemoApp/blob/main/docs/video1.mov"></video>
 
 
 # figma
