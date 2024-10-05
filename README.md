@@ -5,7 +5,7 @@ React Native, Firebase, Expo を使ってメモアプリを開発
 
 # どういったもの動画
 
-![アプリデモ](docs/video1.mov)
+![アプリデモ](_docs/video1.mov)
 
 # figma
 
